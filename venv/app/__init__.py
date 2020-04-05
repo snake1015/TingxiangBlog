@@ -8,6 +8,7 @@
 
 from flask import Flask
 app = Flask(__name__)
+app.config['SECURITY_KEY']= 'xiang&&ting'
 from app import routes
 
 
