@@ -2,9 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>UserLogin</title>
+    {% if title %}
+    <title>{{ title }} page of TingxiangBlog</title>
+    {% else %}
+    <title> login to TingxiangBlog</title>
+    {% endif %}
 </head>
 <body>
+    <div>
+        <ul>Username: <input name="usename" type="text"></ul>
+        <ul>Password: <input name="password" type="password"></ul>
+        <ul><button>Login</button></ul>
+    </div>
 
 </body>
 </html>
