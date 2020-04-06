@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% if title %}
-        <title>{{ title }} of tingxiangblog</title>
-    {% else %}
-        <title>Welcome to tingxiangblog</title>
-    {% endif %}
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
     <h1>Welcome,{{ user.username}}</h1>
-</body>
-</html>
+{% endblock %}
+
