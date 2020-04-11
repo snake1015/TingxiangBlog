@@ -1,5 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Welcome,{{ user.username}}</h1>
+    <table>
+        <tr valign="top">
+            <td><h1>hi {{ current_user.username }}!</h1></td>
+        </tr>
+        <tr>
+            <td>
+                {% print(cureent_user) %}
+            {% if current_user: %}
+            <p><a href="{{ url_for('edit_profile') }}">编辑个人信息</a></p>
+            {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    {% for post in posts %}
+    <div>
+        <table>
+            <tr valign="top">
+            <td><img src="{{ post.author.avator(80) }}"> </td>
+            <td>{{ post.author.username }} says: <br>{{ post.body }}</br></td>
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
 {% endblock %}
 
