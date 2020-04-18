@@ -1,6 +1,7 @@
 <table>
     <tr valign="top">
-        <td><img src="{{ user.avator(36) }}"></td>
-        <td>{{ post.author.username }} : <br>{{ post.body }}</br></td>
+        <td><img src="{{ post.author.avator(36) }}"></td>
+        <td><a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
+            说: <br>{{ post.body }}</br></td>
     </tr>
 </table>

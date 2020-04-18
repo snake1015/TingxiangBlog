@@ -11,6 +11,7 @@
 <body>
     <div>TingxiangBlog:
         <a href="{{ url_for('index') }}">首页</a>
+        <a href="{{ url_for('explore') }}">发现</a>
         {% if current_user.is_anonymous %}
         <a href="{{ url_for('login') }}">登录</a>
         {% else %}

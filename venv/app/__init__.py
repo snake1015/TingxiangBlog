@@ -34,7 +34,7 @@ if not app.debug:
         if app.config['MAIL_USER'] or app.config['MAIL_PASSWORD']:
             auth = (app.config['MAIL_USER'], app.config['MAIL_PASSWORD'])
         secure = None
-        if app.config['MAIL_TLS']:
+        if app.config['MAIL_USE_TLS']:
             secure = ()
         mail_handler = SMTPHandler(
             mailhost=(app.config['MAIL_SERVER'],app.config['MAIL_PORT']),
@@ -43,7 +43,7 @@ if not app.debug:
             subject='tingxiangblog error',
             credentials=auth,
             secure=secure)
-        mail_handler.setLevel(logging.error)
+        mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
         # 将日志记录在本地日志文件中
     if not os.path.exists('logs'):

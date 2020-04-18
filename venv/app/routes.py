@@ -11,7 +11,7 @@ from app.models import User, Post
 from app import app, db
 from flask import render_template, url_for, redirect, flash, request
 from werkzeug.urls import url_parse
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm,PostForm
 import json
 from datetime import datetime
 
@@ -22,17 +22,19 @@ def before_request():
         db.session.commit()
 
 # 主页路由
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
-    # user = {'username': 'Simon'}
-    title = 'Home page'
-    if current_user.is_authenticated:
-        user = User.query.filter_by(username=current_user.username).first()
-        posts = Post.query.filter(Post.user_id==user.id).all()
-    else:
-        posts = Post.query.all()
-    return render_template('index.html', title=title, posts = posts)
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(body=form.post.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post is now live')
+        return redirect(url_for('index'))
+    posts = current_user.followed_posts().all()
+    return render_template('index.html', title='Home page', form=form, posts=posts)
 
 # 用户登录路由
 @app.route('/login', methods=['GET', 'POST'])
@@ -85,7 +87,7 @@ def user(username):
 @app.route('/edit_profile',methods=['GET','POST'])
 @login_required
 def edit_profile():
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.about_me = form.about_me.data
@@ -97,3 +99,41 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html',title='Edit Profile', form=form)
 
+# 关注用户
+@app.route('/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('user {} not found.'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('you cannot follow yourserlf')
+        return redirect(url_for('user', username=username))
+    current_user.follow(user)
+    db.session.commit()
+    flash('You are follwing {}!'.format(username))
+    return redirect(url_for('user', username=username))
+
+# 取消关注
+@app.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('You cannot unfollow yourself!')
+        return redirect(url_for('user', username=username))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('You are not following {}.'.format(username))
+    return redirect(url_for('user', username=username))
+
+#发现页面
+@app.route('/explore')
+@login_required
+def explore():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template('index.html', title='Explore Page', posts=posts)
