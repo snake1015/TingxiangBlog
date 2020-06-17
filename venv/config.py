@@ -9,15 +9,17 @@ import os
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'xiang&&ting'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or 'mysql+pymysql://mysql:wuliao#24@192.168.118.129:3306/tingxiangblog'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI') or 'mysql+pymysql://mysql:wuliao#24@192.168.118.131:3306/tingxiangblog'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_COMMMIT_ON_TEARDOWN = True
-    MAIL_SERVER = os.environ.get('MAIL_SERVER')
-    MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
+    MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'localhost'
+    MAIL_PORT = int(os.environ.get('MAIL_PORT') or 8025)
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') is not None
     MAIL_USER = os.environ.get('MAIL_USER')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    ADMIN = ['qjxking@126.com']
+    ADMINS = ['qjxking@126.com']
+    POSTS_PER_PAGE = 2
+    LANGUAGES = ['zh', 'en']
 
 
 

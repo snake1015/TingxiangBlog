@@ -1,4 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'basebt4.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
 {% block content %}
 <table>
     <tr valign="top">
@@ -9,7 +11,7 @@
             <p>{{ user.about_me }}</p>
             {% endif %}
             {% if user.last_seen %}
-            <p>用户最后登录时间: {{ user.last_seen }}</p>
+            <p>用户最后登录时间: {{ moment(user.last_seen).format('LLL') }}</p>
             {% endif %}
             {% if user == current_user: %}
             <p><a href="{{ url_for('edit_profile') }}">编辑个人信息</a></p>
@@ -22,7 +24,12 @@
 
     </tr>
 </table>
-{% for post in posts %}
-    {% include '_post.html' %}
-{% endfor %}
+{% include '_post.html' %}
+{{ render_pagination(pagination, prev='上一页', next='下一页', align='center')}}
+<!--{% if prev_url %}-->
+<!--<a href="{{ prev_url }}">上一页</a>-->
+<!--{% endif %}-->
+<!--{% if next_url %}-->
+<!--<a href="{{ next_url }}">下一页</a>-->
+<!--{% endif %}-->
 {% endblock %}

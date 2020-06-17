@@ -1,23 +1,22 @@
-{% extends "base.html" %}
+{% extends 'basebt4.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
 {% block content %}
     <h1>hi {{ current_user.username }}!</h1>
     {% if form %}
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.post.label }}<br>
-            {{ form.post(cols=32, rows=4) }}<br>
-            {% for error in form.post.error %}
-            <span style="color:red,">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <div class="post">
+        {{ render_form(form) }}
+    </div>
     {% endif %}
-    {% for post in posts %}
-    <p>
-        {% include '_post.html' %}
-    </p>
-    {% endfor %}
+    {% include '_post.html' %}
+    {{ render_pagination(pagination,prev='上一页', next='下一页', align='center')}}
+
+
+    <!--{% if prev_url %}-->
+    <!--<a href="{{ prev_url }}">上一页</a>-->
+    <!--{% endif %}-->
+    <!--{% if next_url %}-->
+    <!--<a href="{{ next_url }}">下一页</a>-->
+    <!--{% endif %}-->
 {% endblock %}
 
